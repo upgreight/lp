@@ -1951,9 +1951,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const hero = document.querySelector("#hero");
 
   // Logo-Elemente für Farbänderung
-  const logoLink = document.querySelector(".navbar_logo-link");
+  const logoLink    = document.querySelector(".navbar_logo-link");
   const logoElement = document.querySelector(".navbar_logo");
-  const logoSvg = document.querySelector(".navbar_logo-svg");
+  const logoSvgs    = logoLink
+    ? Array.from(logoLink.querySelectorAll("svg"))
+    : [];
 
   if (!navBg || !navMenu || !hero) return;
 
@@ -1972,13 +1974,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Die vollständige CSS-Variable aus dem Attribut verwenden
     if (logoElement) {
       logoElement.style.transition = "color 300ms ease-out"; // Gleiche Transitions wie die Navbar
-      logoElement.style.color = heroLogoColorAttr; // Direkt den Wert verwenden
+      logoElement.style.color      = heroLogoColorAttr;      // Direkt den Wert verwenden
     }
 
-    if (logoSvg) {
-      logoSvg.style.transition = "color 300ms ease-out";
-      logoSvg.style.color = heroLogoColorAttr; // Direkt den Wert verwenden
-    }
+    // Alle SVG-Icons im Link
+    logoSvgs.forEach((svg) => {
+      svg.style.transition = "color 300ms ease-out";
+      svg.style.color      = heroLogoColorAttr;              // Direkt den Wert verwenden
+    });
 
     logoIsCustomColor = true;
   }
@@ -1987,10 +1990,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!logoIsCustomColor) return;
 
     if (logoElement) logoElement.style.color = "";
-    if (logoSvg) logoSvg.style.color = "";
+    logoSvgs.forEach((svg) => {
+      svg.style.color = "";
+    });
 
     logoIsCustomColor = false;
   }
+
 
   function showNav() {
     navBg.classList.add("is-active");
